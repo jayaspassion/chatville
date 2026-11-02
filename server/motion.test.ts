@@ -1,0 +1,5 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';import {meteorPose,METEOR_START,METEOR_END,tornadoRowTop,fragmentOrigin} from '../overlay/motion.js';
+test('meteor tail trails opposite its velocity and movement uses scene coordinates',()=>{const a=meteorPose(0),b=meteorPose(1);assert.equal(a.x,METEOR_START.x);assert.equal(b.y,METEOR_END.y);const theta=a.angle*Math.PI/180;const dx=b.x-a.x,dy=b.y-a.y;assert.ok(Math.cos(theta)*dx+Math.sin(theta)*dy>0);assert.ok(-Math.cos(theta)*dx-Math.sin(theta)*dy<0);assert.ok(dx<0&&dy>0);assert.equal(meteorPose(-1).x,a.x);assert.equal(meteorPose(2).x,b.x);});
+test('tornado warning follows exact grid row pitch',()=>{assert.deepEqual([0,1,2,3].map(tornadoRowTop),[294,454,614,774]);});
+
+test('all plot fragments originate at the same global breakup point',()=>{const colWidth=(1530-5*16)/6;for(let plot=0;plot<24;plot++){const origin=fragmentOrigin(plot);const cx=195+colWidth/2+(plot%6)*(colWidth+16),cy=294+Math.floor(plot/6)*160+15+35+12;assert.ok(Math.abs(cx+origin.x-METEOR_END.x)<.001);assert.ok(Math.abs(cy+origin.y-METEOR_END.y)<.001);}});
