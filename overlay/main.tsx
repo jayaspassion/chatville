@@ -50,7 +50,7 @@ function App(){
  </div></div>;
  })}</section>
  {round?.phase==='saved'&&<div className="fireworks" key={round.id}>{Array.from({length:5},(_,i)=><div className="burst" key={i} style={{left:`${18+i*16}%`,top:`${24+(i%2)*12}%`,animationDelay:`${i*.18}s`}}>{Array.from({length:12},(_,j)=><i key={j} style={{transform:`rotate(${j*30}deg) translateY(-90px)`,background:['#fff1a6','#f5b9ae','#b2e5d5'][i%3]}}/>)}</div>)}</div>}
- <footer><span className="join-key">{active?definition!.defendCommand:'!join'}</span><div>{active?'Protect your own little corner':'Make yourself at home'}<small>{active?'One house. One defense. Make it count.':'Chat to join · !repair to patch · !rebuild from rubble · !stats'}</small></div><span className={`connection ${connected&&state.twitchConnected?'live':''}`}>{connected&&state.twitchConnected?'TWITCH CONNECTED':connected?'LOCAL PREVIEW':'RECONNECTING'}</span></footer>
+ <footer><span className="join-key">{active?definition!.defendCommand:'!join'}</span><div>{active?'Protect your own little corner':'Make yourself at home'}<small>{active?'One house. One defense. New here? Type !help in chat.':'Type !help in Twitch chat for commands · Every 5 personal saves upgrades your house'}</small></div><span className={`connection ${connected&&state.twitchConnected?'live':''}`}>{connected&&state.twitchConnected?'TWITCH CONNECTED':connected?'LOCAL PREVIEW':'RECONNECTING'}</span></footer>
  </main></div>;
 }
 createRoot(document.getElementById('root')!).render(<App/>);

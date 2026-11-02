@@ -58,6 +58,7 @@ export function createVillage(now:()=>number=Date.now,random:()=>number=Math.ran
     command(id:string,username:string,input:string,isBroadcaster=false,simulation=false):CommandResult{
       const advanced=advance();const ignored={changed:advanced};const cmd=input.trim().toLowerCase();
       const house=state.villagers.find(v=>v.id===id);
+      if(cmd==='!help')return {...ignored,reply:'Chatville: !join to claim a house. Defend: meteor !shield, acid rain !umbrella (before 15s), tornado !anchor in the marked row. Join before launch to defend. Idle: !repair once; rubble: !rebuild. !stats shows progress; every 5 personal saves upgrades your house. Broadcaster starts: !meteor, !acidrain, !tornado or !disaster.'};
       if(cmd==='!join'){
         if(house)return {...ignored,reply:"you're already in the village!"};
         if(state.villagers.length===24)return {...ignored,reply:'the village is full!'};

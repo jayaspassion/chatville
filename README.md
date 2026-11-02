@@ -44,10 +44,11 @@ The overlay reconnects automatically and preserves the last good village during 
 
 ## Commands
 
-Commands are case-insensitive and ignore surrounding whitespace. Include the `!`.
+Commands are case-insensitive and ignore surrounding whitespace. Include the `!`. Viewers can type **`!help`** in Twitch chat at any time, even before joining, to receive the command guide. The overlay footer also points new viewers to it.
 
 | Command | Who | Effect |
 | --- | --- | --- |
+| `!help` | Anyone | Bot replies with joining, each disaster defense, repair/rebuild, stats, upgrades, and broadcaster start commands. Works during disasters and without a house. |
 | `!join` | Anyone | One pastel house per Twitch account, next free plot in a 6×4 grid. Duplicate joins and capacity overflow get a chat reply. |
 | `!meteor` | Broadcaster | Start a 30-second meteor. Defend with `!shield`. |
 | `!acidrain` | Broadcaster | Start 30 seconds of acid rain. Defend with `!umbrella`. |
@@ -183,3 +184,11 @@ The subsequent visual pass, also built in this session, added a warmer illustrat
 The overlay keeps its warm village scene at idle. Meteor rounds switch to a midnight-blue sky with stars, fire, drifting embers and luminous personal domes. Acid rain uses an emerald overcast sky, layered streaks, ground splashes and low toxic mist. Tornado rounds use slate-blue storm clouds, wind streaks, orbiting debris and a shaded funnel on the selected row. Names, stats and defenses stay bright against the darker scenery.
 
 The disaster/outcome HUD is a compact 720×103 strip above the village, with the countdown, defense command, time bar and personal protection count. It does not overlap the house grid. Meteor fragments fan out from a shared breakup point. Meteor direction is calculated from its actual movement vector in the 1920×1080 scene; its tail is drawn in the opposite direction. Tornado warning stripes and funnel positions share the exact 160-pixel grid row pitch. Effects use inline SVG and requestAnimationFrame canvas particles; reduced-motion preferences suppress continuous particle animation and repeating environmental motion. The damage rules and 30-second timing are unchanged.
+
+## Optional Twitch channel panel
+
+You can copy the following into a “How to play Chatville” panel beneath your Twitch stream:
+
+> Type **!join** in chat to claim a house. When a disaster starts, use the defense shown: **!shield** for meteors, **!umbrella** for acid rain (before 15 seconds), or **!anchor** for a tornado in your row. Join before launch to defend. Between rounds, **!repair** removes one damage level; use **!rebuild** if your house is rubble. **!stats** shows your progress. Every five personal saves upgrades your home. Type **!help** any time for the command guide.
+
+`!help` is also available through `/simulate` with no broadcaster flag or prior join required.
