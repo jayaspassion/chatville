@@ -44,11 +44,11 @@ The overlay reconnects automatically and preserves the last good village during 
 
 ## Commands
 
-Commands are case-insensitive and ignore surrounding whitespace. Include the `!`. Viewers can type **`!help`** in Twitch chat at any time, even before joining, to receive the command guide. The overlay footer also points new viewers to it.
+Commands are case-insensitive and ignore surrounding whitespace. Include the `!`. Viewers can type **`!help`** in Twitch chat at any time, even before joining, to receive three short, clearly labeled messages instead of a paragraph. Twitch chat uses plain text, so the guide uses uppercase labels and separators rather than Markdown bold. The overlay footer also points new viewers to it.
 
 | Command | Who | Effect |
 | --- | --- | --- |
-| `!help` | Anyone | Bot replies with joining, each disaster defense, repair/rebuild, stats, upgrades, and broadcaster start commands. Works during disasters and without a house. |
+| `!help` | Anyone | Bot sends three short numbered messages: START, DEFEND, and RECOVER. Commands come first, with clear labels and no repeated @mentions. Streamer-only start commands stay in this README. Works during disasters and without a house. |
 | `!join` | Anyone | One pastel house per Twitch account, next free plot in a 6×4 grid. Duplicate joins and capacity overflow get a chat reply. |
 | `!meteor` | Broadcaster | Start a 30-second meteor. Defend with `!shield`. |
 | `!acidrain` | Broadcaster | Start 30 seconds of acid rain. Defend with `!umbrella`. |
@@ -192,3 +192,5 @@ You can copy the following into a “How to play Chatville” panel beneath your
 > Type **!join** in chat to claim a house. When a disaster starts, use the defense shown: **!shield** for meteors, **!umbrella** for acid rain (before 15 seconds), or **!anchor** for a tornado in your row. Join before launch to defend. Between rounds, **!repair** removes one damage level; use **!rebuild** if your house is rubble. **!stats** shows your progress. Every five personal saves upgrades your home. Type **!help** any time for the command guide.
 
 `!help` is also available through `/simulate` with no broadcaster flag or prior join required.
+
+The `!help` response is paced through the existing chat queue. `/simulate` returns its three messages in the `replies` array; other commands continue using the single `reply` field.
