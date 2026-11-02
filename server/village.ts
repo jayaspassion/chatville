@@ -3,7 +3,7 @@ import {DISASTERS,DISASTER_KINDS} from '../shared/disasters.js';
 import {houseUpgrade} from '../shared/upgrades.js';
 const colors=['#edb6a5','#b9cba8','#b8cce0','#dbc1df','#efcf91','#9fcac4'];
 export interface Announcement {text:string; simulation:boolean;priority?:boolean;}
-export interface CommandResult {changed:boolean;reply?:string;replies?:string[];}
+export interface CommandResult {changed:boolean;reply?:string;}
 export function createVillage(now:()=>number=Date.now,random:()=>number=Math.random) {
   const state:VillageState={villagers:[],capacity:24,twitchConnected:false,round:null,serverTime:now(),crownId:null};
   let sequence=0, roundId=0, ticksDone=0, roundSimulation=false;
@@ -58,11 +58,7 @@ export function createVillage(now:()=>number=Date.now,random:()=>number=Math.ran
     command(id:string,username:string,input:string,isBroadcaster=false,simulation=false):CommandResult{
       const advanced=advance();const ignored={changed:advanced};const cmd=input.trim().toLowerCase();
       const house=state.villagers.find(v=>v.id===id);
-      if(cmd==='!help')return {...ignored,replies:[
-        '[1/3 START] !join = get a house. Join before the disaster. Every 5 personal saves upgrades your home.',
-        '[2/3 DEFEND] !shield = meteor | !umbrella = acid (before 15s) | !anchor = tornado (marked row).',
-        '[3/3 RECOVER] !repair = patch up once between rounds | !rebuild = restore rubble | !stats = your progress.'
-      ]};
+      if(cmd==='!help')return {...ignored,reply:'JOIN: !join | DEFEND: !shield (meteor), !umbrella (acid), !anchor (tornado) | FIX: !repair | RUBBLE: !rebuild | PROGRESS: !stats | Every 5 saves upgrades your house. Follow the disaster banner!'};
       if(cmd==='!join'){
         if(house)return {...ignored,reply:"you're already in the village!"};
         if(state.villagers.length===24)return {...ignored,reply:'the village is full!'};

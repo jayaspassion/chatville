@@ -22,15 +22,10 @@ test('random selects all three disaster definitions and simulation milestones st
 test('stats reply reports own values; clean repairs do not consume allowance; no-house replies are helpful',()=>{const {v}=setup(1);assert.match(v.command('0','user0','!stats').reply!,/survived: 0 \| streak: 0 \| best streak: 0 \| damage: 0\/3/);assert.match(v.command('0','user0','!repair').reply!,/intact/);assert.match(v.command('unknown','unknown','!stats').reply!,/!join/);assert.match(v.command('0','user0','!rebuild').reply!,/still standing/);});
 test('every valid launch announces disaster, duration and defense; busy/unauthorized launches do not announce',()=>{for(const kind of DISASTER_KINDS){const {v,start}=setup();v.command('viewer','viewer',DISASTERS[kind].startCommand);assert.equal(v.drainAnnouncements().length,0);start(kind);const notices=v.drainAnnouncements();assert.equal(notices.length,1);assert.equal(notices[0].priority,true);assert.match(notices[0].text,/30 seconds/);assert.ok(notices[0].text.includes(DISASTERS[kind].defendCommand));if(kind==='tornado')assert.match(notices[0].text,/ROW 1/);start(kind);assert.equal(v.drainAnnouncements().length,0);}});
 test('house upgrades use lifetime saves every five, survive streak loss/rebuild, and stats report level',()=>{const {v,start,next}=setup(1);for(let i=1;i<=10;i++){start();v.drainAnnouncements();v.command('0','user0','!shield');next(35000);const upgrades=v.drainAnnouncements().filter(n=>n.text.includes('house upgraded'));assert.equal(upgrades.length,i%5===0?1:0);if(i%5===0)assert.match(upgrades[0].text,new RegExp(`level ${1+i/5}`));}assert.match(v.command('0','user0','!stats').reply!,/house level: 3 \| next upgrade: 15 saves/);const upgradedAt=v.state.villagers[0].upgradedAt;start('acidrain');next(35000);start();next(35000);v.command('0','user0','!rebuild');assert.equal(v.state.villagers[0].survived,10);assert.equal(v.state.villagers[0].streak,0);assert.equal(v.state.villagers[0].upgradedAt,upgradedAt);assert.match(v.command('0','user0','!stats').reply!,/house level: 3/);});
-test('help is three short read-only viewer messages before joining and during disasters',()=>{
- const {v,start}=setup(1);const before=JSON.stringify(v.state);
- const result=v.command('new','new','  !HELP  ');
- assert.equal(result.changed,false);assert.equal(JSON.stringify(v.state),before);
- assert.equal(result.reply,undefined);assert.equal(result.replies!.length,3);
- const guide=result.replies!.join(' ');
- for(const cmd of ['!join','!shield','!umbrella','!anchor','!repair','!rebuild','!stats'])assert.ok(guide.includes(cmd));
- assert.ok(!guide.includes('!meteor')); // Keep broadcaster-only details out of viewer onboarding.
- for(const [i,line] of result.replies!.entries()){assert.ok(line.startsWith(`[${i+1}/3 `));assert.ok(Buffer.byteLength(line,'utf8')<=120);}
- start('acidrain');const active=JSON.stringify(v.state);
- assert.deepEqual(v.command('new','new','!help').replies,result.replies);assert.equal(JSON.stringify(v.state),active);
+test('help is one concise viewer message before joining and during disasters',()=>{
+ const {v,start}=setup(1);const before=JSON.stringify(v.state);const result=v.command('new','new','  !HELP  ');
+ assert.equal(result.changed,false);assert.equal(JSON.stringify(v.state),before);assert.ok(result.reply);
+ for(const cmd of ['!join','!shield','!umbrella','!anchor','!repair','!rebuild','!stats'])assert.ok(result.reply.includes(cmd));
+ assert.ok(!result.reply.includes('!meteor'));assert.ok(result.reply.length<=220);assert.ok(!result.reply.includes('\n'));
+ start('acidrain');const active=JSON.stringify(v.state);assert.equal(v.command('new','new','!help').reply,result.reply);assert.equal(JSON.stringify(v.state),active);
 });

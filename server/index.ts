@@ -63,9 +63,7 @@ if (channel && username && rawToken && ![channel,username,rawToken].some(v => v.
     if(!tags['user-id'] || !tags.username) return;
     const result = village.command(tags['user-id'],tags.username,message,isChannelOwner(tags.username,target,channel));
     if(result.changed) broadcast();
-    if(result.reply) sendChat?.(`@${tags.username} ${result.reply}`);
-    // The public guide uses short numbered messages, without repeated @mentions.
-    for(const line of result.replies??[]) sendChat?.(line);
+    if(result.reply) sendChat?.(message.trim().toLowerCase()==='!help'?result.reply:`@${tags.username} ${result.reply}`);
     flushAnnouncements();
   });
   void client.connect().catch(()=>console.log('Twitch connection failed. Check local credentials and chat:read / chat:edit scopes.'));
