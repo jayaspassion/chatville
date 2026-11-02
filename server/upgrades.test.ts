@@ -1,0 +1,2 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';import {houseUpgrade} from '../shared/upgrades.js';
+test('upgrade thresholds and continuing prestige levels',()=>{for(const [saves,level,tier] of [[0,1,0],[4,1,0],[5,2,1],[9,2,1],[10,3,2],[15,4,3],[20,5,4],[25,6,4],[100,21,4]]){const u=houseUpgrade(saves);assert.equal(u.level,level);assert.equal(u.tier,tier);assert.equal(u.nextAt,(Math.floor(saves/5)+1)*5);}assert.equal(houseUpgrade(25).prestige,1);});
